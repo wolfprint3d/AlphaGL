@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.8)
 project(AlphaGL)
 
 include(mama.cmake)
+message("MAMA_INCLUDES=${MAMA_INCLUDES}")
 include_directories(
     ${MAMA_INCLUDES}
     "."
@@ -14,6 +15,10 @@ elseif(LINUX)
 endif()
 
 file(GLOB AGL_SOURCES AGL/*.cpp AGL/*.h AGL/*.c)
+if(WIN32)
+    set(AGL_SOURCES ${AGL_SOURCES} AGL/AGL.natvis)
+endif()
+
 add_library(AGL ${AGL_SOURCES})
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${AGL_SOURCES})
 

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?> 
+<AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+
+
+    <!-- ///////////////////////////////////////////////////////////////////// -->
+
+    <Type Name="AGL::VertexDescrElem">
+        <DisplayString Condition="size != 0">vec{(int)size} {(ShaderAttr)attr}</DisplayString>
+        <DisplayString Condition="size == 0">empty</DisplayString>
+        <Expand>
+            <Item Name="[attr]">(ShaderAttr)attr</Item>
+            <Item Name="[size]">(int)size</Item>
+        </Expand>
+    </Type>
+
+    <Type Name="AGL::VertexDescr">
+        <DisplayString>sizeOf={sizeOf} [0]={items[0]}</DisplayString>
+        <Expand>
+            <Item Name="[sizeOf]">sizeOf</Item>
+            <ArrayItems>
+                <Size>sizeof(items)/sizeof(*items)</Size>
+                <ValuePointer>items</ValuePointer>
+            </ArrayItems>
+        </Expand>
+    </Type>
+
+    <Type Name="AGL::TextureRef">
+        <DisplayString>{rect} {texture}</DisplayString>
+        <Expand>
+            <Item Name="[texture]">texture</Item>
+            <Item Name="[rect]">rect</Item>
+        </Expand>
+    </Type>
+
+    <Type Name="AGL::Material">
+        <DisplayString>mat {texref} color {color}</DisplayString>
+        <Expand>
+            <Item Name="[shader]">shader</Item>
+            <Item Name="[texref]">texref</Item>
+            <Item Name="[color]">color</Item>
+            <Item Name="[border]">border</Item>
+        </Expand>
+    </Type>
+
+    <Type Name="AGL::Shader">
+        <DisplayString Condition="program != 0">[{program}] {vsPath} | {fsPath}</DisplayString>
+        <DisplayString Condition="program == 0">empty</DisplayString>
+        <Expand>
+            <Item Name="[program]">program</Item>
+            <Item Name="[vert]">vsPath</Item>
+            <Item Name="[frag]">fsPath</Item>
+            <Item Name="[uniforms]">uniforms</Item>
+            <CustomListItems>
+                <Variable Name="i" InitialValue="0" />
+                <Loop>
+                    <Break Condition="i >= u_MaxUniforms" />
+                    <If Condition="uniforms[i] != -1">
+                        <Item>(ShaderUniform)uniforms[i]</Item>
+                    </If>
+                    <Exec>i++</Exec>
+                </Loop>
+            </CustomListItems>
+            <Item Name="[attributes]">attributes</Item>
+            <CustomListItems>
+                <Variable Name="i" InitialValue="0" />
+                <Loop>
+                    <Break Condition="i >= a_MaxAttributes" />
+                    <If Condition="attributes[i] == true">
+                        <Item>(ShaderAttr)i</Item>
+                    </If>
+                    <Exec>i++</Exec>
+                </Loop>
+            </CustomListItems>
+        </Expand>
+    </Type>
+
+</AutoVisualizer>
