@@ -11,5 +11,5 @@ class AlphaGL(mama.BuildTarget):
         self.export_libs('.', ['.lib', '.a']) # export any .lib or .a from build folder
         self.export_includes(['AGL']) # export AGL as include from source folder
 
-    def test(self):
+    def test(self, args):
         pass
