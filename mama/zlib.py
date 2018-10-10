@@ -6,4 +6,4 @@ class zlib_static(mama.BuildTarget):
 
     def package(self):
         self.export_libs('.', ['zlibstatic.lib', 'libz.a'])
-        self.export_includes(['include'], build_dir=True)
+        self.export_include('include', build_dir=True)
