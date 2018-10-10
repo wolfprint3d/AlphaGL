@@ -13,7 +13,7 @@ namespace AGL
         Matrix4 View, Projection, ViewProjection;
 
         float Fov = 45.0f;
-        Vector3 Target = Vector3::ZERO;
+        Vector3 Target = Vector3::Zero();
         bool AutoLookAtTarget = false;
 
         Camera(GLCore& core, SceneNode* parent, string name, int typeFlags = 0);

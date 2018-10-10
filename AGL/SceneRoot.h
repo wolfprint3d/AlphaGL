@@ -15,7 +15,7 @@ namespace AGL
     public:
         static constexpr SceneNodeType NodeType = SN_RootNode;
 
-        Color3 BackgroundColor = Color3::WHITE;
+        Color3 BackgroundColor = Color3::White();
 
         /**
          * The default camera is always created in the scene

@@ -40,9 +40,9 @@ namespace AGL
 
     public:
 
-        Vector3 Position = Vector3::ZERO;
-        Vector3 Scale    = Vector3::ONE;
-        Vector3 Rotation = Vector3::ZERO;
+        Vector3 Position = Vector3::Zero();
+        Vector3 Scale    = Vector3::One();
+        Vector3 Rotation = Vector3::Zero();
 
         SceneNode(GLCore& core, SceneNode* parent, string name, int typeFlags = 0);
         virtual ~SceneNode();

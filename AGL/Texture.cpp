@@ -174,16 +174,16 @@ namespace AGL
 
     ////////////////////////////////////////////////////////////////////////////////
 
-    TextureRef::TextureRef() : texture(0), rect(Rect::ZERO)
+    TextureRef::TextureRef() : texture(0), rect(Rect::Zero())
     {
     }
 
     TextureRef::TextureRef(const Texture* tex) 
-        : texture(tex), rect(Vector2::ZERO, tex ? tex->size() : Vector2::ZERO)
+        : texture(tex), rect(Vector2::Zero(), tex ? tex->size() : Vector2::Zero())
     {
     }
 
-    TextureRef::TextureRef(const Texture& tex) : texture(&tex), rect(Vector2::ZERO,tex.size())
+    TextureRef::TextureRef(const Texture& tex) : texture(&tex), rect(Vector2::Zero(),tex.size())
     {
     }
 

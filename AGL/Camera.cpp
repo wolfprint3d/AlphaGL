@@ -19,7 +19,7 @@ namespace AGL
     }
     void Camera::ClearLookAt()
     {
-        Target = Vector3::ZERO;
+        Target = Vector3::Zero();
         AutoLookAtTarget = false;
     }
 
@@ -27,7 +27,7 @@ namespace AGL
     {
         if (AutoLookAtTarget)
         {
-            View = Matrix4::createLookAt(Position, Target, Vector3::UP);
+            View = Matrix4::createLookAt(Position, Target, Vector3::Up());
         }
         else
         {

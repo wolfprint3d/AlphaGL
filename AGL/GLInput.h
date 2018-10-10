@@ -56,8 +56,8 @@ namespace AGL
         vector<InputHandler<MouseClicked>> MouseClicks;
         vector<InputHandler<MouseMoved>>   MouseMoves;
 
-        Vector3 MousePos   = Vector3::ZERO;
-        Vector3 MouseDelta = Vector3::ZERO;
+        Vector3 MousePos   = Vector3::Zero();
+        Vector3 MouseDelta = Vector3::Zero();
         bool InFocus = false;
 
     public:

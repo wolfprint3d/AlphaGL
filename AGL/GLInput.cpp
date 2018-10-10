@@ -69,7 +69,7 @@ namespace AGL
 
     void GLInput::PollEvents()
     {
-        MouseDelta = Vector3::ZERO;
+        MouseDelta = Vector3::Zero();
     #if USING_GLFW
         glfwPollEvents();
     #endif

@@ -158,7 +158,7 @@ namespace AGL
         Rect rect;
 
     public:
-        DebugRect() : rect(Rect::ZERO) {}
+        DebugRect() : rect(Rect::Zero()) {}
         void SetRect(const Rect& r);
     };
 
@@ -172,7 +172,7 @@ namespace AGL
         float radius;
 
     public:
-        DebugCircle() : point(Vector2::ZERO), radius(1.0f) {}
+        DebugCircle() : point(Vector2::Zero()), radius(1.0f) {}
 
         void SetCircle(Vector2 point, float radius);
     };

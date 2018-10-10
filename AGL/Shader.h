@@ -472,7 +472,7 @@ namespace AGL
         Color border;
         
         Material(Shader* s = nullptr, const TextureRef& t = TextureRef{},
-                 Color c = Color::WHITE, Color b = Color::ZERO)
+                 Color c = Color::White(), Color b = Color::Zero())
                 : shader{s}, texture{t}, color{c}, border{b}
         {
         }

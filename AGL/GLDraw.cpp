@@ -81,11 +81,11 @@ namespace AGL
         lineCoreRadii(width, cr, w2);
 
         float x1 = p1.x, y1 = p1.y, x2 = p2.x, y2 = p2.y;
-        Vector2 right(y2 - y1, x1 - x2);
+        Vector2 right { y2 - y1, x1 - x2 };
         right.normalize();
 
         // extend start and end by a tiny amount (core radius to be exact)
-        Vector2 dir(x2 - x1, y2 - y1);
+        Vector2 dir { x2 - x1, y2 - y1 };
         dir.normalize(cr);
         x1 -= dir.x;
         y1 -= dir.y;
@@ -122,10 +122,10 @@ namespace AGL
         //  0---3
         //  | + |
         //  1---2
-        Vector2 p0(origin.x, origin.y);
-        Vector2 p1(origin.x, origin.y + size.y);
-        Vector2 p2(origin.x + size.x, origin.y + size.y);
-        Vector2 p3(origin.x + size.x, origin.y);
+        Vector2 p0{ origin.x, origin.y };
+        Vector2 p1{ origin.x, origin.y + size.y };
+        Vector2 p2{ origin.x + size.x, origin.y + size.y };
+        Vector2 p3{ origin.x + size.x, origin.y };
         LineAA(p0, p1, lineWidth);
         LineAA(p1, p2, lineWidth);
         LineAA(p2, p3, lineWidth);
@@ -140,10 +140,10 @@ namespace AGL
         const float x = center.x, y = center.y;
 
         float alpha = segmentArc;
-        Vector2 A(x, y + radius);
+        Vector2 A { x, y + radius };
         for (int i = 0; i < segments; ++i)
         {
-            Vector2 B(x + sinf(alpha)*radius, y + cosf(alpha)*radius);
+            Vector2 B { x + sinf(alpha)*radius, y + cosf(alpha)*radius };
             LineAA(A, B, lineWidth);
             A = B;
             alpha += segmentArc;
@@ -416,7 +416,7 @@ namespace AGL
 
         Vector3 ab = b - a;
         Vector3 localZ = ab.normalized(); // Z dir
-        Vector3 localX = localZ.cross((localZ + Vector3::ONE).normalized());
+        Vector3 localX = localZ.cross((localZ + Vector3::One()).normalized());
         Vector3 localY = localZ.cross(localX);
 
         float r = lineWidth * 0.5f;
@@ -547,12 +547,12 @@ namespace AGL
         const float length = radius * 2;
         Vector3 p1 = center + radius * Vector3{ -1.0f, 0.0f, -1.0f};
         Vertex3Color* v = (Vertex3Color*)&vertices[n];
-        v[0].set(center + Vector3::UP*radius, color);
+        v[0].set(center + Vector3::Up()*radius, color);
         v[1].set(p1, color);
-        v[2].set(p1 + length * Vector3::RIGHT, color);
+        v[2].set(p1 + length * Vector3::Right(), color);
         v[3].set(p1 + length * Vector3{ +1.0f, 0.0f, +1.0f }, color);
-        v[4].set(p1 + length * Vector3::FORWARD, color);
-        v[5].set(center - Vector3::UP*radius, color);
+        v[4].set(p1 + length * Vector3::Forward(), color);
+        v[5].set(center - Vector3::Up()*radius, color);
 
         size_t numIndices = indices.size();
         indices.resize(numIndices + 3 * 8); // 3 indices per face
@@ -609,7 +609,7 @@ namespace AGL
 
         Vector3 ab = b - a;
         Vector3 localZ = ab.normalized(); // Z dir
-        Vector3 localX = localZ.cross((localZ + Vector3::ONE).normalized());
+        Vector3 localX = localZ.cross((localZ + Vector3::One()).normalized());
         Vector3 localY = localZ.cross(localX);
 
         float alpha = segmentArc;
