@@ -224,7 +224,7 @@ namespace AGL
 
     SceneRoot* GLCore::CreateSceneRoot(string name)
     {
-        SceneRoot = std::make_unique<AGL::SceneRoot>(*this, move(name));
+        SceneRoot = std::make_unique<AGL::SceneRoot>(*this, std::move(name));
         return SceneRoot.get();
     }
 
@@ -235,7 +235,6 @@ namespace AGL
         SceneRoot->Update(DeltaTime);
         SceneRoot->Render();
     }
-
 
     ////////////////////////////////////////////////////////////////////////////////
 }
