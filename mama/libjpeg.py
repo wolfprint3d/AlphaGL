@@ -1,5 +1,5 @@
 import mama
-class libjpe(mama.BuildTarget):
+class libjpeg(mama.BuildTarget):
     def dependencies(self):
         pass
 
