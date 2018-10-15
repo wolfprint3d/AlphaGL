@@ -32,3 +32,5 @@
 *.app
 mama.cmake
 build/
+bin/AGLTests
+
