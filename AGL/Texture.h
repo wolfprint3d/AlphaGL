@@ -1,9 +1,15 @@
-//
-// Created by Jorma on 24/05/16.
-//
+/**
+ * OpenGL Texture operations, Copyright (c) 2017-208, Jorma Rebane
+ * Distributed under MIT Software License
+ */
 #pragma once
 #include <rpp/vec.h>
 #include "AGLConfig.h"
+#include "Bitmap.h"
+
+#define AGL_BMP_SUPPORT 1
+#define AGL_PNG_SUPPORT 1
+#define AGL_JPEG_SUPPORT 0
 
 namespace AGL
 {
@@ -15,6 +21,7 @@ namespace AGL
     using rpp::Vector2;
     ////////////////////////////////////////////////////////////////////////////////
 
+
     enum TextureHint 
     {
         TexHintNone,
@@ -23,40 +30,19 @@ namespace AGL
         TexHintJPG,
     };
 
+
     static constexpr bool isPowerOfTwo(int n) // 64,128,256,512,...
     {
         return (n & (n - 1)) == 0;
     }
 
-    struct FromFrameBuffer {};
 
     /**
-     * Simple bitmap data in RAM.
-     * Can be used for transferring texture data to other API's
+     * Resource wrapper for OpenGL texture handles
+     * Textures are stored in GPU texture memory
+     * For accessing the data, either use OpenGL texture data functions,
+     * or use the Bitmap API via `Texture::getBitmap()`
      */
-    class AGL_API Bitmap
-    {
-    public:
-        int Width    = 0;
-        int Height   = 0;
-        int Channels = 0;
-        int Stride   = 0;
-        uint8_t* Data = nullptr;
-
-        Bitmap();
-        ~Bitmap();
-        Bitmap(Bitmap&& bitmap);
-        Bitmap& operator=(Bitmap&& bitmap);
-
-        Bitmap(const Bitmap& bitmap) = delete;
-        Bitmap& operator=(const Bitmap& bitmap) = delete;
-
-        static Bitmap create(int glTexture);
-        static Bitmap create(int width, int height, int channels, FromFrameBuffer);
-    };
-
-
-    /** Resource wrapper for OpenGL texture handles */
     class AGL_API Texture
     {
         string texname; // for debugging, mostly
@@ -98,20 +84,26 @@ namespace AGL
         Vector2 size() const { return Vector2{ (float)glWidth, (float)glHeight }; }
         uint nativeHandle() const { return glTexture; }
 
-        /** Loads texture from a file onto GPU memory */
+        /**
+         * Loads an image from a file into GPU texture memory
+         */
         bool loadFromFile(const string& filename);
 
-        /** Loads texture from data onto GPU memory */
-        bool loadFromData(const void* data, int size, TextureHint hint = TexHintNone);
+        /**
+         * Loads image data such as JPG, PNG, BMP
+         * into raw texture data into GPU texture memory
+         * This is used by loadFromFile()
+         */
+        bool loadBitmap(const void* data, int size, TextureHint hint = TexHintNone);
 
         /** Loads raw data into GPU texture memory */
-        bool loadFromRawData(const void* data, int width, int height, int channels);
+        bool loadData(const void* data, int width, int height, int channels);
 
         /** Unload texture from GPU memory */
         void unload();
 
         // Enables tiling for this texture - only works if the texture is a power of two (GLES limitation)
-        void enableTextureTiling(const bool enable=true);
+        void enableTextureTiling(bool enable=true);
 
         void bind();
         void unbind();
@@ -122,6 +114,7 @@ namespace AGL
         // call getTextureDataSize() to get the minimum required bytes
         bool getTextureData(void* paddedDestination, bool bgr = false);
         std::vector<uint8_t> getTextureData(bool bgr = false);
+        Bitmap getBitmap(bool bgr = false);
 
         /**
          * Load PNG as an OpenGL texture
