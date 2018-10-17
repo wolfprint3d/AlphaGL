@@ -28,6 +28,7 @@ namespace AGL
         return (n & (n - 1)) == 0;
     }
 
+    struct FromFrameBuffer {};
 
     /**
      * Simple bitmap data in RAM.
@@ -51,6 +52,7 @@ namespace AGL
         Bitmap& operator=(const Bitmap& bitmap) = delete;
 
         static Bitmap create(int glTexture);
+        static Bitmap create(int width, int height, int channels, FromFrameBuffer);
     };
 
 

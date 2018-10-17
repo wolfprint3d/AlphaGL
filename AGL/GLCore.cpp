@@ -182,7 +182,7 @@ namespace AGL
     Bitmap GLCore::GetFrameBuffer() const
     {
         glFinish();
-        return Bitmap::create(gl.FrameBuf.texture());
+        return Bitmap::create(gl.Width, gl.Height, gl.BytesPerPixel, FromFrameBuffer{});
     }
 
     bool GLCore::WindowShouldClose() const

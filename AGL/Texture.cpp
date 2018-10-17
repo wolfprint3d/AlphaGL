@@ -55,6 +55,27 @@ namespace AGL
         return bmp;
     }
 
+    Bitmap Bitmap::create(int width, int height, int channels, FromFrameBuffer)
+    {
+        glFlushErrors();
+
+        Bitmap bmp;
+        bmp.Width = width;
+        bmp.Height = height;
+        bmp.Channels = channels;
+        bmp.Stride = AlignRowTo4(bmp.Width, channels);
+        bmp.Data = (uint8_t*)malloc(bmp.Stride * bmp.Height);
+
+        int type = GL_BGR;
+        if (channels == 1) type = GL_RED;
+        if (channels == 4) type = GL_BGRA;
+
+        glReadPixels(0, 0, width, height, type, GL_UNSIGNED_BYTE, bmp.Data);
+        if (auto err = glGetErrorStr())
+            ThrowErr("Fatal: glReadPixels failed: %s", err);
+        return Bitmap();
+    }
+
     ////////////////////////////////////////////////////////////////////////////////
 
     bool Texture::GPUCompression = false;
