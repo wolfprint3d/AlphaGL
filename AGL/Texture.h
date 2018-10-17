@@ -99,8 +99,9 @@ namespace AGL
         /**
          * Loads raw data into GPU texture memory
          * @note each row must be aligned to 4-byte boundary
+         * @param bgr If true, texture data is treated as BGR
          */
-        bool loadData(const void* data, int width, int height, int channels);
+        bool loadData(const void* data, int width, int height, int channels, bool bgr = false);
 
         /**
          * Unload texture from GPU memory
@@ -121,6 +122,22 @@ namespace AGL
         std::vector<uint8_t> getTextureData(bool bgr = false);
         Bitmap getBitmap(bool bgr = false);
 
+        //
+        // @note allocatedImage will be freed if `freeAllocatedImage` == `true`
+        // @note each row must be aligned to 4-byte boundary
+        /**
+         * Creates a new OpenGL texture from raw image data
+         * @param allocatedImage Allocated image data.
+         * @note each row must be aligned to 4-byte boundary
+         * @param w
+         * @param h
+         * @param channels
+         * @param bgr If true, texture data is treated as BGR
+         * @param freeAllocatedImage allocatedImage will be freed if `freeAllocatedImage` == `true`
+         * @return Texture handle on success, 0 on failure
+         */
+        static uint createTexture(void* allocatedImage, int w, int h, int channels, bool bgr=false, bool freeAllocatedImage=true);
+
         /**
          * Load PNG as an OpenGL texture
          * @return Texture handle, or 0 on failure
@@ -129,11 +146,6 @@ namespace AGL
         static uint loadJPG(const void* data, int size, int& outWidth, int& outHeight, int& outChannels);
         static uint loadBMP(const void* data, int size, int& outWidth, int& outHeight, int& outChannels);
 
-        // Creates a new OpenGL texture from raw image data
-        // @note allocatedImage will be freed if `freeAllocatedImage` == `true`
-        // @note each row must be aligned to 4-byte boundary
-        static uint createTexture(void* allocatedImage, int w, int h, int channels, bool freeAllocatedImage=true);
-   
         // Saves this texture as a BMP file, @warning: texture will be rebound
         bool saveAsBMP(strview fileName);
         static bool saveAsBMP(strview fileName, const void* data, int width, int height, int channels);

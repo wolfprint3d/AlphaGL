@@ -97,7 +97,7 @@ namespace AGL
         return glTexture != 0;
     }
 
-    bool Texture::loadData(const void* data, int width, int height, int channels)
+    bool Texture::loadData(const void* data, int width, int height, int channels, bool bgr)
     {
         if (!data || width <= 0 || height <= 0 || channels <= 0) {
             LogError("invalid texture data: %p %dx%dpx ch:%d", data, width, height, channels);
@@ -199,10 +199,13 @@ namespace AGL
 
     ////////////////////////////////////////////////////////////////////////////////
 
-    uint Texture::createTexture(void* allocatedImage, int w, int h, int channels, bool freeAllocatedImage)
+    uint Texture::createTexture(void* allocatedImage, int w, int h, int channels, bool bgr, bool freeAllocatedImage)
     {
-        constexpr GLenum uncompressedFormats[] = { GL_LUMINANCE, GL_LUMINANCE_ALPHA, GL_RGB, GL_RGBA };
-        GLenum imgFmt = uncompressedFormats[channels - 1];
+        GLenum imgFmt = GL_LUMINANCE;
+        if      (channels == 2) imgFmt = GL_LUMINANCE_ALPHA;
+        else if (channels == 3) imgFmt = bgr ? GL_BGR : GL_RGB;
+        else if (channels == 4) imgFmt = bgr ? GL_BGRA : GL_RGBA;
+
         GLenum gpuFmt = imgFmt;
     #ifndef __EMSCRIPTEN__
         if (Texture::GPUCompression)
