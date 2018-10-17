@@ -14,6 +14,49 @@ namespace AGL
     using rpp::ulong;
     ////////////////////////////////////////////////////////////////////////////////
 
+    Bitmap::Bitmap()
+    {
+    }
+    Bitmap::~Bitmap()
+    {
+        if (Data) free(Data);
+    }
+    Bitmap::Bitmap(Bitmap&& bitmap)
+    {
+        this->operator=(std::move(bitmap));
+    }
+    Bitmap& Bitmap::operator=(Bitmap&& bitmap)
+    {
+        std::swap(Width,    bitmap.Width);
+        std::swap(Height,   bitmap.Height);
+        std::swap(Channels, bitmap.Channels);
+        std::swap(Data,     bitmap.Data);
+        return *this;
+    }
+
+    Bitmap Bitmap::create(int glTexture)
+    {
+        glFlushErrors();
+
+        Bitmap bmp;
+
+        glGetTextureLevelParameteriv(glTexture, 0, GL_TEXTURE_WIDTH, &bmp.Width);
+        if (auto err = glGetErrorStr()) ThrowErr("Fatal: glGetTextureLevelParameteriv failed: %s", err);
+        
+        glGetTextureLevelParameteriv(glTexture, 0, GL_TEXTURE_HEIGHT, &bmp.Height);
+        if (auto err = glGetErrorStr()) ThrowErr("Fatal: glGetTextureLevelParameteriv failed: %s", err);
+        
+        bmp.Channels = 3;
+        bmp.Stride = AlignRowTo4(bmp.Width, bmp.Channels);
+        bmp.Data = (uint8_t*)malloc(bmp.Stride * bmp.Height);
+        glGetTexImage(GL_TEXTURE_2D, 0, GL_BGR, GL_UNSIGNED_BYTE, bmp.Data);
+        if (auto err = glGetErrorStr()) ThrowErr("Fatal: glGetTexImage failed: %s", err);
+
+        return bmp;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+
     bool Texture::GPUCompression = false;
 
     ////////////////////////////////////////////////////////////////////////////////

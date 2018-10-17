@@ -28,6 +28,32 @@ namespace AGL
         return (n & (n - 1)) == 0;
     }
 
+
+    /**
+     * Simple bitmap data in RAM.
+     * Can be used for transferring texture data to other API's
+     */
+    class AGL_API Bitmap
+    {
+    public:
+        int Width    = 0;
+        int Height   = 0;
+        int Channels = 0;
+        int Stride   = 0;
+        uint8_t* Data = nullptr;
+
+        Bitmap();
+        ~Bitmap();
+        Bitmap(Bitmap&& bitmap);
+        Bitmap& operator=(Bitmap&& bitmap);
+
+        Bitmap(const Bitmap& bitmap) = delete;
+        Bitmap& operator=(const Bitmap& bitmap) = delete;
+
+        static Bitmap create(int glTexture);
+    };
+
+
     /** Resource wrapper for OpenGL texture handles */
     class AGL_API Texture
     {

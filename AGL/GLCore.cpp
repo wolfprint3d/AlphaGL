@@ -179,6 +179,12 @@ namespace AGL
         LogInfo("Saved Framebuffer to '%s'", bmpFile.c_str());
     }
 
+    Bitmap GLCore::GetFrameBuffer() const
+    {
+        glFinish();
+        return Bitmap::create(gl.FrameBuf.texture());
+    }
+
     bool GLCore::WindowShouldClose() const
     {
         return gl.WindowShouldClose();

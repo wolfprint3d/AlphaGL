@@ -51,6 +51,9 @@ namespace AGL
         // OpenGL framebuffer format type, such as GL_RGB
         unsigned format()   const { return Format; }
 
+        // FrameBuffer texture handle
+        unsigned texture() const { return Texture; }
+
         bool isDefaultBuffer() const { return DefaultFrameBuffer; }
     };
 

@@ -52,6 +52,11 @@ namespace AGL
          */
         void SaveFrameBuffer(const string& bmpFile) const;
 
+        /**
+         * Converts current framebuffer texture to a bitmap
+         */
+        Bitmap GetFrameBuffer() const;
+
         bool WindowShouldClose() const;
 
         // normalized color [0..1]
