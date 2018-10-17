@@ -6,7 +6,7 @@ namespace AGL
     /////////////////////////////////////////////////////////////////////////////////
 
     SceneNode::SceneNode(GLCore& core, SceneNode* parent, string name, int typeFlags)
-        : Type(SceneNodeType(typeFlags)), Core(core), Parent(parent), NodeName(move(name))
+        : Type(SceneNodeType(typeFlags)), Core(core), Parent(parent), NodeName(std::move(name))
     {
     }
 
@@ -29,7 +29,7 @@ namespace AGL
     {
         auto actor = CreateNode<Actor>(name);
         actor->Mesh = std::move(mesh);
-        actor->Material.color = color;
+        actor->Mat.color = color;
         return actor;
     }
 
@@ -37,7 +37,7 @@ namespace AGL
     {
         auto actor = CreateNode<Actor>(name);
         actor->Mesh = std::move(mesh);
-        actor->Material.texture = texture;
+        actor->Mat.texture = texture;
         return actor;
     }
 
@@ -45,7 +45,7 @@ namespace AGL
     {
         auto actor = CreateNode<Actor>(name);
         actor->Mesh = std::move(mesh);
-        actor->Material.texture = texture;
+        actor->Mat.texture = texture;
         return actor;
     }
 

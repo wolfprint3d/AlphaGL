@@ -27,19 +27,19 @@ namespace AGL
         if (Mesh)
         {
             Matrix4 modelViewProj = viewProjection * worldTransform;
-            if (!Material.shader)
+            if (!Mat.shader)
             {
-                if      (Material.texture)        Material.shader = &Core.Simple3dShader();
-                else if (Mesh.hasAttrib(a_Color)) Material.shader = &Core.VertexColor3dShader();
-                else                              Material.shader = &Core.Color3dShader();
+                if      (Mat.texture)        Mat.shader = &Core.Simple3dShader();
+                else if (Mesh.hasAttrib(a_Color)) Mat.shader = &Core.VertexColor3dShader();
+                else                              Mat.shader = &Core.Color3dShader();
             }
 
-            Shader& shader = *Material.shader;
+            Shader& shader = *Mat.shader;
             CheckGLResult(shader.bind(), "shader.bind()");
             CheckGLResult(shader.bind(u_Transform, modelViewProj), "shader.bind(u_Transform)");
-            CheckGLResult(shader.bind(u_DiffuseColor, Material.color), "shader.bind(u_DiffuseColor)");
-            if (Material.texture)
-                CheckGLResult(shader.bind(u_DiffuseTex, Material.texture), "shader.bind(u_DiffuseTex)");
+            CheckGLResult(shader.bind(u_DiffuseColor, Mat.color), "shader.bind(u_DiffuseColor)");
+            if (Mat.texture)
+                CheckGLResult(shader.bind(u_DiffuseTex, Mat.texture), "shader.bind(u_DiffuseTex)");
             CheckGLResult(Mesh.draw(), "mesh.draw()");
         }
 

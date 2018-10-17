@@ -14,7 +14,7 @@ namespace AGL
         static constexpr SceneNodeType NodeType = SN_Actor;
 
         VertexBuffer Mesh;
-        Material Material;
+        Material Mat;
 
         Actor(GLCore& core, SceneNode* parent, string name, int typeFlags = 0);
 
