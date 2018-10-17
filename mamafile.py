@@ -12,7 +12,7 @@ class AlphaGL(mama.BuildTarget):
 
     def package(self):
         self.export_libs('.', ['.lib', '.a']) # export any .lib or .a from build folder
-        self.export_includes(['AGL']) # export AGL as include from source folder
+        self.export_include('.')
         if self.linux:
             self.export_syslib('GL')
             self.export_syslib('X11')
