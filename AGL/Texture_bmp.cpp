@@ -146,7 +146,7 @@ namespace AGL
             return 0;
         }
 
-        uint8_t* img = (uint8_t*)malloc(bmi.SizeImage); // allocate enough for the entire image
+        auto* img = (uint8_t*)malloc(bmi.SizeImage); // allocate enough for the entire image
         reader.set(bmh.OffBits);  // seek to start of image data
         reader.read(img, bmi.SizeImage);
         outWidth    = bmi.Width;

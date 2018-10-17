@@ -255,7 +255,7 @@ namespace AGL
             return 0;
         }
 
-        if (pow2) glGenerateMipmap(GL_TEXTURE_2D); // generate mipmaps
+        //if (pow2) glGenerateMipmap(GL_TEXTURE_2D); // generate mipmaps
 
         glBindTexture(GL_TEXTURE_2D, 0); // unbind the texture
         return glTexture;
