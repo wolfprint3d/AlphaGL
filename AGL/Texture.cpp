@@ -2,8 +2,15 @@
 #include "OpenGL.h"
 #include <rpp/file_io.h>
 
-#include <png.h>
-#include <jpeglib.h>
+#define PNG_SUPPORT 1
+#define JPEG_SUPPORT 0
+
+#if PNG_SUPPORT
+#  include <png.h>
+#endif
+#if JPEG_SUPPORT
+#  include <jpeglib.h>
+#endif
 
 namespace AGL
 {
@@ -440,6 +447,7 @@ namespace AGL
 
     ////////////////////////////////////////////////////////////////////////////////
     ///////// LIBJPEG
+#if JPEG_SUPPORT
     class JpegLoader
     {
         jpeg_decompress_struct cinfo = { nullptr };
@@ -498,6 +506,7 @@ namespace AGL
             return Texture::createTexture(img, width, height, channels);
         }
     };
+#endif // JPEG_SUPPORT
 
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -639,7 +648,12 @@ namespace AGL
 
     uint Texture::loadJPG(const void* data, int size, int& outWidth, int& outHeight, int& outChannels)
     {
-        return JpegLoader{}.load(data, size, outWidth, outHeight, outChannels);
+        #if JPEG_SUPPORT
+            return JpegLoader{}.load(data, size, outWidth, outHeight, outChannels);
+        #else
+            fprintf(stderr, "JPEG not supported in this build.");
+            return 0;
+        #endif
     }
 
     bool Texture::saveAsBMP(strview fileName)
