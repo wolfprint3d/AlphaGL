@@ -11,7 +11,7 @@ class AlphaGL(mama.BuildTarget):
         self.add_git('ReCpp',   'https://github.com/RedFox20/ReCpp.git')
 
     def package(self):
-        self.export_libs('.', ['.lib', '.a']) # export any .lib or .a from build folder
+        self.export_libs('.', ['AGL.lib', 'libAGL.a']) # export from build folder
         self.export_include('.')
         if self.linux:
             self.export_syslib('GL')
