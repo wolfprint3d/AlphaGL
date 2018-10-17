@@ -14,7 +14,7 @@ namespace AGL
     using std::unique_ptr;
     struct GLRendererCtx;
 
-    class DLLEXPORT GLCore
+    class AGL_API GLCore
     {
         GLRendererCtx& gl;
 

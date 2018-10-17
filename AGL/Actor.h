@@ -8,7 +8,7 @@ namespace AGL
     /** 
      * @brief Basic VISIBLE scene object
      */
-    class Actor : public SceneNode
+    class AGL_API Actor : public SceneNode
     {
     public:
         static constexpr SceneNodeType NodeType = SN_Actor;

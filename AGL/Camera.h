@@ -5,7 +5,7 @@
 namespace AGL
 {
 
-    class DLLEXPORT Camera : public SceneNode
+    class AGL_API Camera : public SceneNode
     {
     public:
         static constexpr SceneNodeType NodeType = SN_Camera;

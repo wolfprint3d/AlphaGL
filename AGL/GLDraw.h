@@ -15,7 +15,7 @@ namespace AGL
      *     If you need extra color, your shader must use uniform diffuseColor
      *     Check shaders/vertexalpha.vert
      */
-    class GLDraw2D
+    class AGL_API GLDraw2D
     {
         vector<Vertex2Alpha> vertices;
         vector<index_t>      indices;

@@ -5,6 +5,7 @@
 #if _WIN32
 #include <rpp/delegate.h>
 #include "OpenGL.h"
+#include "AGLConfig.h"
 #include <Objbase.h> // CoInitialize
 #include <GLFW/glfw3.h>
 #ifndef USING_GLFW
@@ -16,7 +17,7 @@ namespace AGL
     using std::string;
     ////////////////////////////////////////////////////////////////////////////////
 
-    class GLContext
+    class AGL_API GLContext
     {
         int Width            = 0;
         int Height           = 0;

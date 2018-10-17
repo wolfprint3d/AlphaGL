@@ -48,7 +48,7 @@ namespace AGL
         }
     };
 
-    class DLLEXPORT GLInput
+    class AGL_API GLInput
     {
         void* Context = nullptr;
         vector<InputHandler<KeyEvent>>     KeyEvents;

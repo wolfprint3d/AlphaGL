@@ -29,7 +29,7 @@ namespace AGL
     }
 
     /** Resource wrapper for OpenGL texture handles */
-    class DLLEXPORT Texture
+    class AGL_API Texture
     {
         string texname; // for debugging, mostly
         uint glTexture = 0; // OpenGL texture
@@ -115,7 +115,7 @@ namespace AGL
      * @brief Weak reference to a texture with a rect that provides 
      *        a sub-rect into the texture.
      */
-    struct TextureRef
+    struct AGL_API TextureRef
     {
         /** @brief WEAK REF to a texture */
         const Texture* texture;

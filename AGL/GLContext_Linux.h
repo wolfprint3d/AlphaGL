@@ -11,7 +11,7 @@ namespace AGL
     using std::string;
     ////////////////////////////////////////////////////////////////////////////////
 
-    class GLContext
+    class AGL_API GLContext
     {
         // X11 stuff
         Display*   XDisplay  = nullptr;

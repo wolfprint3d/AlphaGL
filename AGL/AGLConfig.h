@@ -1,9 +1,9 @@
 #pragma once
 
-#ifndef DLLEXPORT
+#ifndef AGL_API
     #if _MSC_VER
-        #define DLLEXPORT __declspec(dllexport)
+        #define AGL_API __declspec(dllexport)
     #else // clang/gcc
-        #define DLLEXPORT __attribute__((visibility("default")))
+        #define AGL_API __attribute__((visibility("default")))
     #endif
 #endif

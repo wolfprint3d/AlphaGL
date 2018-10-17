@@ -243,7 +243,7 @@ namespace AGL
 
 
     /** @brief Provides methods for creating efficient Vertex array objects and rendering them */
-    class VertexBuffer
+    class AGL_API VertexBuffer
     {
         DrawMode drawMode    = DrawNone; // how do we draw the vertices in VAO?
         uint32_t vertexArray = 0;        // vertex array object, required by modern opengl
@@ -380,7 +380,7 @@ namespace AGL
 
     ////////////////////////////////////////////////////////////////////////////////
 
-    class Shader
+    class AGL_API Shader
     {
         uint32_t program;  // linked glProgram
         string vsPath;     // vert shader path
@@ -457,7 +457,7 @@ namespace AGL
     /**
      * @brief Combines a Shader with additional texture and color information
      */
-    struct Material
+    struct AGL_API Material
     {
         /** @brief WEAK REF to a shader used by this material */
         Shader* shader;

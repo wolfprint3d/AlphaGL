@@ -22,7 +22,7 @@ namespace AGL
     /**
      * @brief Base class for scene nodes, may not be renderable
      */
-    class SceneNode
+    class AGL_API SceneNode
     {
     public:
         static constexpr SceneNodeType NodeType = SN_None;

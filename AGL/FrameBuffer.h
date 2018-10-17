@@ -2,12 +2,13 @@
 // Created by Jorma on 28/05/17.
 //
 #pragma once
+#include "AGLConfig.h"
 
 namespace AGL
 {
     ////////////////////////////////////////////////////////////////////////////////
 
-    class FrameBuffer
+    class AGL_API FrameBuffer
     {
         unsigned FrameBuf  = 0;
         unsigned RenderBuf = 0;

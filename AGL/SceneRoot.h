@@ -10,7 +10,7 @@ namespace AGL
     /**
      * @brief Root node of the scenegraph
      */
-    class SceneRoot : public SceneNode
+    class AGL_API SceneRoot : public SceneNode
     {
     public:
         static constexpr SceneNodeType NodeType = SN_RootNode;
