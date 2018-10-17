@@ -78,6 +78,7 @@ namespace AGL
             return node;
         }
         
+        class Actor* CreateActor(string name);
         class Actor* CreateActor(string name, AGL::VertexBuffer&& mesh);
         class Actor* CreateActor(string name, AGL::VertexBuffer&& mesh, Color color);
         class Actor* CreateActor(string name, AGL::VertexBuffer&& mesh, const AGL::Texture& texture);

@@ -18,6 +18,11 @@ namespace AGL
         #endif
     }
 
+    Actor* SceneNode::CreateActor(string name)
+    {
+        return CreateNode<Actor>(name);
+    }
+
     Actor* SceneNode::CreateActor(string name, AGL::VertexBuffer&& mesh)
     {
         auto actor = CreateNode<Actor>(name);
