@@ -172,6 +172,22 @@ namespace AGL
         return glTexture != 0;
     }
 
+    bool Texture::loadFromRawData(const void* data, int width, int height, int channels)
+    {
+        if (!data || width <= 0 || height <= 0 || channels <= 0) {
+            LogError("invalid texture data: %p %dx%dpx ch:%d", data, width, height, channels);
+            return false;
+        }
+        glTexture = createTexture((void*)data, width, height, channels, /*freeAllocatedImage:*/false);
+        glWidth = width;
+        glHeight = height;
+        glChannels = channels;
+        if (!glTexture) {
+            LogError("failed to generate GL texture");
+        }
+        return glTexture != 0;
+    }
+
     void Texture::unload()
     {
         if (glTexture) {
@@ -273,7 +289,7 @@ namespace AGL
 
     ////////////////////////////////////////////////////////////////////////////////
 
-    uint Texture::createTexture(void* allocatedImage, int w, int h, int channels)
+    uint Texture::createTexture(void* allocatedImage, int w, int h, int channels, bool freeAllocatedImage)
     {
         constexpr GLenum uncompressedFormats[] = { GL_LUMINANCE, GL_LUMINANCE_ALPHA, GL_RGB, GL_RGBA };
         GLenum imgFmt = uncompressedFormats[channels - 1];
@@ -316,7 +332,9 @@ namespace AGL
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         glPixelStorei(GL_UNPACK_ALIGNMENT, 4); // this is the default value
         glTexImage2D(GL_TEXTURE_2D, 0, gpuFmt, w, h, 0, imgFmt, GL_UNSIGNED_BYTE, allocatedImage);
-        free(allocatedImage);
+        if (freeAllocatedImage) {
+            free(allocatedImage);
+        }
 
         if (const char* err = glGetErrorStr()) {
             LogError("glTexImage2D failed: %s", err);

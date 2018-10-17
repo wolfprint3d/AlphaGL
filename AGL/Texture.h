@@ -104,6 +104,9 @@ namespace AGL
         /** Loads texture from data onto GPU memory */
         bool loadFromData(const void* data, int size, TextureHint hint = TexHintNone);
 
+        /** Loads raw data into GPU texture memory */
+        bool loadFromRawData(const void* data, int width, int height, int channels);
+
         /** Unload texture from GPU memory */
         void unload();
 
@@ -129,8 +132,8 @@ namespace AGL
         static uint loadBMP(const void* data, int size, int& outWidth, int& outHeight, int& outChannels);
 
         // Creates a new OpenGL texture from raw image data
-        // @note: allocatedImage will be freed
-        static uint createTexture(void* allocatedImage, int w, int h, int channels);
+        // @note: allocatedImage will be freed if `freeAllocatedImage` == `true`
+        static uint createTexture(void* allocatedImage, int w, int h, int channels, bool freeAllocatedImage=true);
    
         // Saves this texture as a BMP file, @warning: texture will be rebound
         bool saveAsBMP(strview fileName);
