@@ -4,6 +4,7 @@
 #pragma once
 #if __linux__
 #include "OpenGL.h"
+#include "AGLConfig.h"
 #include <GL/glx.h> // linux specific opengl X11
 
 namespace AGL
