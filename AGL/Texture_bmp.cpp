@@ -11,8 +11,8 @@ namespace AGL
 #pragma pack(1) // make sure no struct alignment packing is made
     struct CIEXYZTRIPLE { struct CIEXYZ { long x, y, z; } r, g, b; };
     struct RGBQUAD { uint8_t b, g, r, x; };
-    struct BitmapFileHeader { ushort Type; uint Size, Reserved, OffBits; };
-    struct BitmapInfoHeader { uint Size; int Width, Height; ushort Planes, BitCount; uint Compression, SizeImage; uint XPelsPerMeter, YPelsPerMeter; uint ClrUsed, ClrImportant; };
+    struct BitmapFileHeader { uint16_t Type; uint Size, Reserved, OffBits; };
+    struct BitmapInfoHeader { uint Size; int Width, Height; uint16_t Planes, BitCount; uint Compression, SizeImage; uint XPelsPerMeter, YPelsPerMeter; uint ClrUsed, ClrImportant; };
     struct BitmapV5InfoHeader { BitmapInfoHeader BIH; uint RedMask, GreenMask, BlueMask, AlphaMask, CSType; CIEXYZTRIPLE EndPoints; uint GammaRed, GammaGreen, GammaBlue, Intent, ProfileData, ProfileSize, Reserved; };
 #pragma pack(pop)
 
@@ -45,7 +45,7 @@ namespace AGL
             BitmapV5InfoHeader bmiV5 = { {
                                              sizeof(BitmapV5InfoHeader), // size of the V5 struct
                                              width, height,  // height of the image - negative for top-down bitmap
-                                             ushort(1), ushort(8u), 0u,	// 1 plane, 8bpp, BI_RGB(uncompressed)
+                                             uint16_t(1), uint16_t(8u), 0u,	// 1 plane, 8bpp, BI_RGB(uncompressed)
                                              uint(paddedSize),			// image data size
                                              3780u, 3780u,				// X/YPelsPerMeter
                                              256u, 0u					// 256 colors in the color table, all colors
@@ -63,7 +63,7 @@ namespace AGL
             BitmapInfoHeader bmi = {
                     sizeof(BitmapInfoHeader),	// size of this struct
                     width, height,					 // height of the image - negative for top-down bitmap
-                    ushort(1), ushort(channels*8),0u,// 1 plane, number of bits: 8/24/32, BI_RGB(uncompressed)
+                    uint16_t(1), uint16_t(channels*8), 0u,// 1 plane, number of bits: 8/24/32, BI_RGB(uncompressed)
                     uint(paddedSize),				 // size of image
                     3780u, 3780u,					 // X/YPelsPerMeter
                     0u, 0u,							 // No colortable

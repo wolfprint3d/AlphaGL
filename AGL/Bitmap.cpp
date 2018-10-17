@@ -32,7 +32,7 @@ namespace AGL
         return *this;
     }
 
-    Bitmap Bitmap::create(uint glTexture)
+    Bitmap Bitmap::create(unsigned glTexture)
     {
         glFlushErrors();
 
@@ -64,7 +64,7 @@ namespace AGL
         bmp.Stride = AlignRowTo4(bmp.Width, channels);
         bmp.Data = (uint8_t*)malloc(size_t(bmp.Stride) * bmp.Height);
 
-        uint type = GL_BGR;
+        unsigned type = GL_BGR;
         if (channels == 1) type = GL_RED;
         if (channels == 4) type = GL_BGRA;
 
