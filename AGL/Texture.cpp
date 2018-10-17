@@ -103,7 +103,7 @@ namespace AGL
             LogError("invalid texture data: %p %dx%dpx ch:%d", data, width, height, channels);
             return false;
         }
-        glTexture = createTexture((void*)data, width, height, channels, /*freeAllocatedImage:*/false);
+        glTexture = createTexture((void*)data, width, height, channels, bgr, /*freeAllocatedImage:*/false);
         glWidth = width;
         glHeight = height;
         glChannels = channels;
@@ -203,7 +203,7 @@ namespace AGL
     {
         GLenum imgFmt = GL_LUMINANCE;
         if      (channels == 2) imgFmt = GL_LUMINANCE_ALPHA;
-        else if (channels == 3) imgFmt = bgr ? GL_BGR : GL_RGB;
+        else if (channels == 3) imgFmt = bgr ? GL_BGR  : GL_RGB;
         else if (channels == 4) imgFmt = bgr ? GL_BGRA : GL_RGBA;
 
         GLenum gpuFmt = imgFmt;
@@ -244,6 +244,7 @@ namespace AGL
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         glPixelStorei(GL_UNPACK_ALIGNMENT, 4); // 4 is the default value
         glTexImage2D(GL_TEXTURE_2D, 0, gpuFmt, w, h, 0, imgFmt, GL_UNSIGNED_BYTE, allocatedImage);
+
         if (freeAllocatedImage) {
             free(allocatedImage);
         }

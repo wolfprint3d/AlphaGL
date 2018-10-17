@@ -122,9 +122,6 @@ namespace AGL
         std::vector<uint8_t> getTextureData(bool bgr = false);
         Bitmap getBitmap(bool bgr = false);
 
-        //
-        // @note allocatedImage will be freed if `freeAllocatedImage` == `true`
-        // @note each row must be aligned to 4-byte boundary
         /**
          * Creates a new OpenGL texture from raw image data
          * @param allocatedImage Allocated image data.
@@ -136,7 +133,7 @@ namespace AGL
          * @param freeAllocatedImage allocatedImage will be freed if `freeAllocatedImage` == `true`
          * @return Texture handle on success, 0 on failure
          */
-        static uint createTexture(void* allocatedImage, int w, int h, int channels, bool bgr=false, bool freeAllocatedImage=true);
+        static uint createTexture(void* allocatedImage, int w, int h, int channels, bool bgr, bool freeAllocatedImage);
 
         /**
          * Load PNG as an OpenGL texture

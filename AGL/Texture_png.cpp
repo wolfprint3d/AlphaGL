@@ -106,7 +106,7 @@ namespace AGL
                 uint8_t* row = img + y * stride;
                 png_read_row(png, (png_bytep)row, nullptr);
             }
-            return Texture::createTexture(img, width, height, channels);
+            return Texture::createTexture(img, width, height, channels, false, true);
         }
     };
 #endif // PNG_SUPPORT

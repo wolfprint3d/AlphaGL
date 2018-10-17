@@ -152,7 +152,7 @@ namespace AGL
         outWidth    = bmi.Width;
         outHeight   = bmi.Height;
         outChannels = nchannels;
-        return Texture::createTexture(img, bmi.Width, bmi.Height, nchannels);
+        return Texture::createTexture(img, bmi.Width, bmi.Height, nchannels, false, true);
     }
 
     ////////////////////////////////////////////////////////////////////////////////

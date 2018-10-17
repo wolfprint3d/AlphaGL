@@ -65,7 +65,7 @@ namespace AGL
             outWidth    = width;
             outHeight   = height;
             outChannels = channels;
-            return Texture::createTexture(img, width, height, channels);
+            return Texture::createTexture(img, width, height, channels, false, true);
         }
     };
 #endif // AGL_JPEG_SUPPORT
