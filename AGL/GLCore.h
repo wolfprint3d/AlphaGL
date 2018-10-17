@@ -55,7 +55,7 @@ namespace AGL
         /**
          * Converts current framebuffer texture to a bitmap
          */
-        Bitmap GetFrameBuffer() const;
+        AGL::Bitmap GetFrameBuffer() const;
 
         bool WindowShouldClose() const;
 
