@@ -16,6 +16,8 @@ class AlphaGL(mama.BuildTarget):
         if self.linux:
             self.export_syslib('GL')
             self.export_syslib('X11')
+        if self.windows:
+            self.export_syslib('opengl32.lib')
 
     def test(self, args):
         self.gdb('bin/AGLTests')

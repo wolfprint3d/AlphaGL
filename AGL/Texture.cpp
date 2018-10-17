@@ -73,7 +73,7 @@ namespace AGL
         glReadPixels(0, 0, width, height, type, GL_UNSIGNED_BYTE, bmp.Data);
         if (auto err = glGetErrorStr())
             ThrowErr("Fatal: glReadPixels failed: %s", err);
-        return Bitmap();
+        return bmp;
     }
 
     ////////////////////////////////////////////////////////////////////////////////
