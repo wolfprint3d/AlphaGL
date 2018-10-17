@@ -96,10 +96,15 @@ namespace AGL
          */
         bool loadBitmap(const void* data, int size, TextureHint hint = TexHintNone);
 
-        /** Loads raw data into GPU texture memory */
+        /**
+         * Loads raw data into GPU texture memory
+         * @note each row must be aligned to 4-byte boundary
+         */
         bool loadData(const void* data, int width, int height, int channels);
 
-        /** Unload texture from GPU memory */
+        /**
+         * Unload texture from GPU memory
+         */
         void unload();
 
         // Enables tiling for this texture - only works if the texture is a power of two (GLES limitation)
@@ -125,7 +130,8 @@ namespace AGL
         static uint loadBMP(const void* data, int size, int& outWidth, int& outHeight, int& outChannels);
 
         // Creates a new OpenGL texture from raw image data
-        // @note: allocatedImage will be freed if `freeAllocatedImage` == `true`
+        // @note allocatedImage will be freed if `freeAllocatedImage` == `true`
+        // @note each row must be aligned to 4-byte boundary
         static uint createTexture(void* allocatedImage, int w, int h, int channels, bool freeAllocatedImage=true);
    
         // Saves this texture as a BMP file, @warning: texture will be rebound

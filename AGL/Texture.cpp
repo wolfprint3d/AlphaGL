@@ -97,7 +97,7 @@ namespace AGL
         return glTexture != 0;
     }
 
-    bool Texture::loadData(const void *data, int width, int height, int channels)
+    bool Texture::loadData(const void* data, int width, int height, int channels)
     {
         if (!data || width <= 0 || height <= 0 || channels <= 0) {
             LogError("invalid texture data: %p %dx%dpx ch:%d", data, width, height, channels);
@@ -239,7 +239,7 @@ namespace AGL
         // GLES on iOS requires this to enable NPOT textures:
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-        glPixelStorei(GL_UNPACK_ALIGNMENT, 4); // this is the default value
+        glPixelStorei(GL_UNPACK_ALIGNMENT, 4); // 4 is the default value
         glTexImage2D(GL_TEXTURE_2D, 0, gpuFmt, w, h, 0, imgFmt, GL_UNSIGNED_BYTE, allocatedImage);
         if (freeAllocatedImage) {
             free(allocatedImage);
