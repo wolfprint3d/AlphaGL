@@ -8,8 +8,8 @@ class libpng(mama.BuildTarget):
         zinclude, zlibrary = self.get_target_products('zlib')
         self.add_cmake_options(f'ZLIB_INCLUDE_DIR={zinclude}')
         self.add_cmake_options(f'ZLIB_LIBRARY={zlibrary}')
-        self.add_cmake_options('PNG_STATIC=YES',
-                               'PNG_SHARED=NO',
+        self.add_cmake_options('PNG_STATIC=YES', # glennrp/libpng.git
+                               'PNG_SHARED=NO', # RedFox20/libpng.git
                                'PNG_TESTS=NO',
                                'PNG_DEBUG=NO')
 
