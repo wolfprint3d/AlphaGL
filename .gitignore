@@ -33,4 +33,5 @@
 mama.cmake
 build/
 bin/AGLTests
-
+.idea/
+cmake-build-debug/

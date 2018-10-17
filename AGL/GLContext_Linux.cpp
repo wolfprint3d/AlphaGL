@@ -81,7 +81,7 @@ namespace AGL
         {
             printf("============================================================\n");
             printf("Creating %s OpenGL Context ... \n", createWindow ? "Windowed" : "Headless");
-            XDisplay = XOpenDisplay(NULL);
+            XDisplay = XOpenDisplay(nullptr);
             if (!XDisplay) ThrowErr("Fatal: Failed to open X display");
 
             GLXFBConfig bestConfig = XSelectBestFBConfig(createWindow);
@@ -240,7 +240,7 @@ namespace AGL
         }
 
         BytesPerPixel = best.depth / 8;
-        printf("  [picked FBC 0x%-3lx %2d-bit %-4s %s]\n", best.visualid, best.depth, XVIPixelFormat(best), XVIClassName(best));
+        printf(" [picked FBC 0x%-3lx %2d-bit %-4s %s]\n", best.visualid, best.depth, XVIPixelFormat(best), XVIClassName(best));
         return bestConfig;
     }
 
@@ -261,7 +261,6 @@ namespace AGL
             vi.visual, CWBorderPixel | CWColormap | CWEventMask, &swa);
         if (!XWindow) {
             ThrowErr("Fatal: Failed to create window.");
-            return;
         }
         printf("OK\n");
         XStoreName(XDisplay, XWindow, "Window");
@@ -269,6 +268,8 @@ namespace AGL
         printf("Mapping window... ");
         XMapWindow(XDisplay, XWindow);
         printf("OK\n");
+        Width = width;
+        Height = height;
     }
 
     void GLContext::XCreatePBuffer(GLXFBConfig config, int width, int height)
