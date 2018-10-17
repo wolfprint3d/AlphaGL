@@ -9,7 +9,7 @@
 
 #define AGL_BMP_SUPPORT 1
 #define AGL_PNG_SUPPORT 1
-#define AGL_JPEG_SUPPORT 0
+#define AGL_JPEG_SUPPORT _WIN32
 
 namespace AGL
 {
@@ -94,14 +94,14 @@ namespace AGL
          * into raw texture data into GPU texture memory
          * This is used by loadFromFile()
          */
-        bool loadBitmap(const void* data, int size, TextureHint hint = TexHintNone);
+        bool loadBitmap(const void* bitmapData, int numBytes, TextureHint hint);
 
         /**
          * Loads raw data into GPU texture memory
          * @note each row must be aligned to 4-byte boundary
-         * @param bgr If true, texture data is treated as BGR
          */
-        bool loadData(const void* data, int width, int height, int channels, bool bgr = false);
+        bool loadData(const void* data, int width, int height, int channels);
+        bool loadData(const Bitmap& bitmap);
 
         /**
          * Unload texture from GPU memory
@@ -124,24 +124,14 @@ namespace AGL
 
         /**
          * Creates a new OpenGL texture from raw image data
-         * @param allocatedImage Allocated image data.
+         * @param imageData Allocated image data.
          * @note each row must be aligned to 4-byte boundary
          * @param w
          * @param h
          * @param channels
-         * @param bgr If true, texture data is treated as BGR
-         * @param freeAllocatedImage allocatedImage will be freed if `freeAllocatedImage` == `true`
          * @return Texture handle on success, 0 on failure
          */
-        static uint createTexture(void* allocatedImage, int w, int h, int channels, bool bgr, bool freeAllocatedImage);
-
-        /**
-         * Load PNG as an OpenGL texture
-         * @return Texture handle, or 0 on failure
-         */
-        static uint loadPNG(const void* data, int size, int& outWidth, int& outHeight, int& outChannels);
-        static uint loadJPG(const void* data, int size, int& outWidth, int& outHeight, int& outChannels);
-        static uint loadBMP(const void* data, int size, int& outWidth, int& outHeight, int& outChannels);
+        static uint createTexture(void* imageData, int w, int h, int channels);
 
         // Saves this texture as a BMP file, @warning: texture will be rebound
         bool saveAsBMP(strview fileName);

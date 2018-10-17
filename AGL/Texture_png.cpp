@@ -32,11 +32,11 @@ namespace AGL
             memcpy(dstbuf, io->ptr, numBytes);
             io->ptr += numBytes;
         }
-        uint load(const void* data, int size, int& outWidth, int& outHeight, int& outChannels)
+        bool load(Bitmap& bmp, const void* data, int size)
         {
             if (size <= 8 || !png_check_sig((png_bytep)data, 8)) {
                 LogError("png error: invalid png signature");
-                return 0;
+                return false;
             }
             while (const char* err = glGetErrorStr()) {
                 LogWarning("Errors before loadPNG: %s  "
@@ -55,7 +55,7 @@ namespace AGL
             uint32_t ret = png_get_IHDR(png, info, &width, &height, &bitDepth, &colorType, 0, 0, 0);
             if (ret != 1) {
                 LogError("png error: failed to read PNG header");
-                return 0;
+                return false;
             }
 
             // http://www.libpng.org/pub/png/libpng-1.2.5-manual.html#section-3.7
@@ -96,9 +96,12 @@ namespace AGL
                 return 0;
             }
 
-            outWidth    = width;
-            outHeight   = height;
-            outChannels = channels;
+            bmp.Data     = img;
+            bmp.Width    = width;
+            bmp.Height   = height;
+            bmp.Channels = channels;
+            bmp.Stride   = stride;
+            bmp.Owns     = true;
 
             // OpenGL eats images in reverse row order, so read all rows in reverse
             for (int y = height-1; y >= 0; --y)
@@ -106,18 +109,19 @@ namespace AGL
                 uint8_t* row = img + y * stride;
                 png_read_row(png, (png_bytep)row, nullptr);
             }
-            return Texture::createTexture(img, width, height, channels, false, true);
+            return true;
         }
     };
 #endif // PNG_SUPPORT
 
-    uint Texture::loadPNG(const void* data, int size, int& outWidth, int& outHeight, int& outChannels)
+    bool Bitmap::loadPNG(const void* imageData, int numBytes)
     {
+        clear();
         #if AGL_PNG_SUPPORT
-            return PngLoader{}.load(data, size, outWidth, outHeight, outChannels);
+            return PngLoader{}.load(*this, imageData, numBytes);
         #else
             fprintf(stderr, "PNG not supported in this build.");
-            return 0;
+            return false;
         #endif
     }
 

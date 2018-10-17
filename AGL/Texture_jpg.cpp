@@ -72,13 +72,14 @@ namespace AGL
 
     ////////////////////////////////////////////////////////////////////////////////
 
-    uint Texture::loadJPG(const void* data, int size, int& outWidth, int& outHeight, int& outChannels)
+    bool Bitmap::loadJPG(const void* imageData, int numBytes)
     {
+        clear();
         #if AGL_JPEG_SUPPORT
-            return JpegLoader{}.load(data, size, outWidth, outHeight, outChannels);
+            return JpegLoader{}.load(*this, imageData, numBytes);
         #else
             fprintf(stderr, "JPEG not supported in this build.");
-            return 0;
+            return false;
         #endif
     }
 

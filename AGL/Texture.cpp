@@ -77,19 +77,22 @@ namespace AGL
         return false;
     }
 
-    bool Texture::loadBitmap(const void *data, int size, TextureHint hint)
+    bool Texture::loadBitmap(const void* bitmapData, int numBytes, TextureHint hint)
     {
         if (glTexture) {
             LogWarning("warning: duplicate texture load '%s'", texname.c_str());
             return true; // we already have a texture; success.
         }
 
+        Bitmap bitmap;
         switch (hint) {
-            case TexHintPNG: glTexture = loadPNG(data, size, glWidth, glHeight, glChannels); break;
-            case TexHintJPG: glTexture = loadJPG(data, size, glWidth, glHeight, glChannels); break;
-            case TexHintBMP: glTexture = loadBMP(data, size, glWidth, glHeight, glChannels); break;
+            case TexHintPNG: bitmap.loadPNG(bitmapData, numBytes); break;
+            case TexHintJPG: bitmap.loadJPG(bitmapData, numBytes); break;
+            case TexHintBMP: bitmap.loadBMP(bitmapData, numBytes); break;
             default:         LogError("error: unsupported image format: %d", hint);
         }
+
+
 
         if (!glTexture) {
             LogError("failed to generate GL texture: '%s'", texname.c_str());
@@ -97,16 +100,28 @@ namespace AGL
         return glTexture != 0;
     }
 
-    bool Texture::loadData(const void* data, int width, int height, int channels, bool bgr)
+    bool Texture::loadData(const void* data, int width, int height, int channels)
     {
         if (!data || width <= 0 || height <= 0 || channels <= 0) {
             LogError("invalid texture data: %p %dx%dpx ch:%d", data, width, height, channels);
             return false;
         }
-        glTexture = createTexture((void*)data, width, height, channels, bgr, /*freeAllocatedImage:*/false);
+        glTexture = createTexture((void*)data, width, height, channels, /*freeAllocatedImage:*/false);
         glWidth = width;
         glHeight = height;
         glChannels = channels;
+        if (!glTexture) {
+            LogError("failed to generate GL texture");
+        }
+        return glTexture != 0;
+    }
+
+    bool Texture::loadData(const Bitmap& bitmap)
+    {
+        glTexture = createTexture((void*)bitmap.Data, bitmap.Width, bitmap.Height, bitmap.Channels, /*freeAllocatedImage:*/false);
+        glWidth = bitmap.Width;
+        glHeight = bitmap.Height;
+        glChannels = bitmap.Channels;
         if (!glTexture) {
             LogError("failed to generate GL texture");
         }
@@ -187,24 +202,27 @@ namespace AGL
 
     Bitmap Texture::getBitmap(bool bgr)
     {
-        Bitmap bmp;
-        bmp.Width = glWidth;
-        bmp.Height = glHeight;
-        bmp.Channels = glChannels;
-        bmp.Stride = AlignRowTo4(glWidth, glChannels);
-        bmp.Data = (uint8_t*)malloc(size_t(bmp.Height) * bmp.Stride);
+        Bitmap bmp {
+            (uint8_t*)malloc(size_t(bmp.Height) * bmp.Stride),
+            glWidth,
+            glHeight,
+            glChannels,
+            AlignRowTo4(glWidth, glChannels),
+            true
+        };
         getTextureData(bmp.Data, bgr);
         return bmp;
     }
 
+
     ////////////////////////////////////////////////////////////////////////////////
 
-    uint Texture::createTexture(void* allocatedImage, int w, int h, int channels, bool bgr, bool freeAllocatedImage)
+    uint Texture::createTexture(void* imageData, int w, int h, int channels)
     {
         GLenum imgFmt = GL_LUMINANCE;
         if      (channels == 2) imgFmt = GL_LUMINANCE_ALPHA;
-        else if (channels == 3) imgFmt = bgr ? GL_BGR  : GL_RGB;
-        else if (channels == 4) imgFmt = bgr ? GL_BGRA : GL_RGBA;
+        else if (channels == 3) imgFmt = GL_RGB;
+        else if (channels == 4) imgFmt = GL_RGBA;
 
         GLenum gpuFmt = imgFmt;
     #ifndef __EMSCRIPTEN__
@@ -237,17 +255,14 @@ namespace AGL
 
         // OpenGLES mipmapping is limited
         const bool pow2 = isPowerOfTwo(w) && isPowerOfTwo(h);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, pow2 ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR);
+        // @todo This causes rendering bug on Windows, so wtf?
+        //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, pow2 ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR);
 
         // GLES on iOS requires this to enable NPOT textures:
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         glPixelStorei(GL_UNPACK_ALIGNMENT, 4); // 4 is the default value
-        glTexImage2D(GL_TEXTURE_2D, 0, gpuFmt, w, h, 0, imgFmt, GL_UNSIGNED_BYTE, allocatedImage);
-
-        if (freeAllocatedImage) {
-            free(allocatedImage);
-        }
+        glTexImage2D(GL_TEXTURE_2D, 0, gpuFmt, w, h, 0, imgFmt, GL_UNSIGNED_BYTE, imageData);
 
         if (const char* err = glGetErrorStr()) {
             LogError("glTexImage2D failed: %s", err);
@@ -255,7 +270,7 @@ namespace AGL
             return 0;
         }
 
-        //if (pow2) glGenerateMipmap(GL_TEXTURE_2D); // generate mipmaps
+        if (pow2) glGenerateMipmap(GL_TEXTURE_2D); // generate mipmaps
 
         glBindTexture(GL_TEXTURE_2D, 0); // unbind the texture
         return glTexture;

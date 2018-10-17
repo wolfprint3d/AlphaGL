@@ -115,8 +115,7 @@ namespace AGL
 
 
     ////////////////////////////////////////////////////////////////////////////////
-    /// BMP loading
-
+    ////////// BMP loading
 
     struct binary_reader
     {
@@ -131,28 +130,33 @@ namespace AGL
         void read(uint8_t* dst, int size) const { memcpy(dst, ptr, size_t(size)); }
     };
 
-    uint Texture::loadBMP(const void* data, int size, int& outWidth, int& outHeight, int& outChannels)
+    bool Bitmap::loadBMP(const void* imageData, int numBytes)
     {
-        binary_reader reader = { data, size };
+        clear();
+
+        binary_reader reader = { imageData, numBytes };
         auto& bmh = *reader.read<BitmapFileHeader>();
         if (bmh.Type != 19778) { // read BitmapFileHeader for OffBits
-            return 0;
+            return false;
         }
 
         auto& bmi = *reader.read<BitmapInfoHeader>(); // read BitmapInfoHeader for size info
         int nchannels = bmi.BitCount >> 3;
         if (!(1 <= nchannels && nchannels <= 4)) {
             LogError("Corrupted BMP, invalid number of channels: %d", nchannels);
-            return 0;
+            return false;
         }
 
         auto* img = (uint8_t*)malloc(bmi.SizeImage); // allocate enough for the entire image
         reader.set(bmh.OffBits);  // seek to start of image data
         reader.read(img, bmi.SizeImage);
-        outWidth    = bmi.Width;
-        outHeight   = bmi.Height;
-        outChannels = nchannels;
-        return Texture::createTexture(img, bmi.Width, bmi.Height, nchannels, false, true);
+        Data     = img;
+        Width    = bmi.Width;
+        Height   = bmi.Height;
+        Channels = nchannels;
+        Stride   = bmi.SizeImage / bmi.Height;
+        Owns     = true;
+        return true;
     }
 
     ////////////////////////////////////////////////////////////////////////////////

@@ -15,9 +15,13 @@ namespace AGL
     ////////////////////////////////////////////////////////////////////////////////
 
     Bitmap::Bitmap() = default;
+    Bitmap::Bitmap(uint8_t * data, int w, int h, int channels, int stride, bool freeDataWhenDone)
+        : Data{data}, Width{w}, Height{h}, Channels{channels}, Stride{stride}, Owns{freeDataWhenDone}
+    {
+    }
     Bitmap::~Bitmap()
     {
-        if (Data) free(Data);
+        if (Owns) free(Data);
     }
     Bitmap::Bitmap(Bitmap&& bitmap) noexcept
     {
@@ -25,11 +29,26 @@ namespace AGL
     }
     Bitmap& Bitmap::operator=(Bitmap&& bitmap) noexcept
     {
+        std::swap(Data,     bitmap.Data);
         std::swap(Width,    bitmap.Width);
         std::swap(Height,   bitmap.Height);
         std::swap(Channels, bitmap.Channels);
-        std::swap(Data,     bitmap.Data);
+        std::swap(Stride,   bitmap.Stride);
+        std::swap(Owns,     bitmap.Owns);
         return *this;
+    }
+
+    void Bitmap::clear()
+    {
+        if (Owns) free(Data);
+        Data = nullptr;
+        Width = Height = Channels = Stride = 0;
+        Owns = false;
+    }
+
+    void Bitmap::bgr2rgb()
+    {
+        AGL::bgr2rgb(Data, Width, Height, Channels, Stride);
     }
 
     Bitmap Bitmap::create(unsigned glTexture)
@@ -72,6 +91,42 @@ namespace AGL
         if (auto err = glGetErrorStr())
             ThrowErr("Fatal: glReadPixels failed: %s", err);
         return bmp;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+
+    void bgr2rgb(uint8_t* bitmapData, int w, int h, int channels, int stride)
+    {
+        if (channels == 3)
+        {
+            uint8_t* ptr = bitmapData;
+            for (int y = 0; y < h; ++y)
+            {
+                uint8_t* row = &ptr[stride * y];
+                for (int x = 0; x < w; ++x)
+                {
+                    uint8_t tmp = row[0];
+                    row[0] = row[2];
+                    row[2] = tmp;
+                    row += 3;
+                }
+            }
+        }
+        else if (channels == 4)
+        {
+            uint8_t* ptr = bitmapData;
+            for (int y = 0; y < h; ++y)
+            {
+                uint8_t* row = &ptr[stride * y];
+                for (int x = 0; x < w; ++x)
+                {
+                    uint8_t tmp = row[0];
+                    row[0] = row[2];
+                    row[2] = tmp;
+                    row += 4;
+                }
+            }
+        }
     }
 
     ////////////////////////////////////////////////////////////////////////////////
