@@ -57,9 +57,13 @@ namespace AGL
         int stride = Stride;
         uint8_t* src = Data;
         uint8_t* dst = Data + (h - 1)*stride;
+        uint8_t* tmp = (uint8_t*)_alloca(stride);
+
         while (src < dst)
         {
-            memcpy(dst, src, stride);
+            memcpy(tmp, src, stride);
+            memcpy(src, dst, stride);
+            memcpy(dst, tmp, stride);
             src += stride;
             dst -= stride;
         }
