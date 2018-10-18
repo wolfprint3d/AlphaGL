@@ -8,7 +8,7 @@
 
 #define AGL_BMP_SUPPORT 1
 #define AGL_PNG_SUPPORT 1
-#define AGL_JPEG_SUPPORT _WIN32
+#define AGL_JPEG_SUPPORT 0
 
 namespace AGL
 {
