@@ -153,7 +153,7 @@ namespace AGL
         TextureRef(const Texture& tex);
         TextureRef(const Texture& tex, Rect rect);
 
-        operator bool() const { return texture  && texture->good(); }
+        explicit operator bool() const { return texture  && texture->good(); }
         bool operator!()const { return !texture || !texture->good(); }
 
         bool operator==(const TextureRef& t) const {

@@ -39,7 +39,7 @@ namespace AGL
             CheckGLResult(shader.bind(u_Transform, modelViewProj), "shader.bind(u_Transform)");
             CheckGLResult(shader.bind(u_DiffuseColor, Mat.color), "shader.bind(u_DiffuseColor)");
             if (Mat.texture)
-                CheckGLResult(shader.bind(u_DiffuseTex, Mat.texture), "shader.bind(u_DiffuseTex)");
+                CheckGLResult(shader.bind(u_DiffuseTex, Mat.texture.texture), "shader.bind(u_DiffuseTex)");
             CheckGLResult(Mesh.draw(), "mesh.draw()");
         }
 
