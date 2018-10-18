@@ -57,7 +57,7 @@ namespace AGL
         int stride = Stride;
         uint8_t* src = Data;
         uint8_t* dst = Data + (h - 1)*stride;
-        uint8_t* tmp = (uint8_t*)_alloca(stride);
+        uint8_t* tmp = (uint8_t*)alloca(stride);
 
         while (src < dst)
         {

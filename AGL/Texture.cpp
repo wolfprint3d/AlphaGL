@@ -191,12 +191,13 @@ namespace AGL
 
     Bitmap Texture::getBitmap(bool bgr)
     {
+        int stride = AlignRowTo4(glWidth, glChannels);
         Bitmap bmp {
-            (uint8_t*)malloc(size_t(bmp.Height) * bmp.Stride),
+            (uint8_t*)malloc(size_t(glHeight) * stride),
             glWidth,
             glHeight,
             glChannels,
-            AlignRowTo4(glWidth, glChannels),
+            stride,
             true
         };
         getTextureData(bmp.Data, bgr);
