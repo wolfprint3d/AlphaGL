@@ -96,8 +96,8 @@ namespace AGL
          * Loads raw data into GPU texture memory
          * @note each row must be aligned to 4-byte boundary
          */
-        bool loadData(const void* data, int width, int height, int channels);
-        bool loadData(const Bitmap& bmp);
+        bool load(const void* data, int width, int height, int channels);
+        bool load(const Bitmap& bmp);
 
         /**
          * Unload texture from GPU memory

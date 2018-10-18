@@ -93,10 +93,10 @@ namespace AGL
             default:         LogError("error: unsupported image format: %d", hint);
         }
 
-        return loadData(bitmap);
+        return load(bitmap);
     }
 
-    bool Texture::loadData(const void* data, int width, int height, int channels)
+    bool Texture::load(const void* data, int width, int height, int channels)
     {
         if (!data || width <= 0 || height <= 0 || channels <= 0) {
             LogError("invalid texture data: %p %dx%dpx ch:%d", data, width, height, channels);
@@ -113,7 +113,7 @@ namespace AGL
         return glTexture != 0;
     }
 
-    bool Texture::loadData(const Bitmap& bmp)
+    bool Texture::load(const Bitmap& bmp)
     {
         glTexture  = createTexture((void*)bmp.Data, bmp.Width, bmp.Height, bmp.Channels);
         glWidth    = bmp.Width;
