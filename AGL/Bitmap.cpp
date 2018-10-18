@@ -51,6 +51,20 @@ namespace AGL
         AGL::bgr2rgb(Data, Width, Height, Channels, Stride);
     }
 
+    void Bitmap::verticalFlip()
+    {
+        int h = Height;
+        int stride = Stride;
+        uint8_t* src = Data;
+        uint8_t* dst = Data + (h - 1)*stride;
+        while (src < dst)
+        {
+            memcpy(dst, src, stride);
+            src += stride;
+            dst -= stride;
+        }
+    }
+
     Bitmap Bitmap::create(unsigned glTexture)
     {
         glFlushErrors();

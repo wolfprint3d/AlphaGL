@@ -6,6 +6,10 @@
 #include "AGLConfig.h"
 #include <stdint.h>
 
+#define AGL_BMP_SUPPORT 1
+#define AGL_PNG_SUPPORT 1
+#define AGL_JPEG_SUPPORT _WIN32
+
 namespace AGL
 {
     struct FromFrameBuffer {};
@@ -48,6 +52,11 @@ namespace AGL
          * Converts this image data from BGR <-> RGB
          */
         void bgr2rgb();
+
+        /**
+         * Performs a vertical flip on the image data.
+         */
+        void verticalFlip();
 
         static Bitmap create(unsigned glTexture);
         static Bitmap create(int width, int height, int channels, FromFrameBuffer);

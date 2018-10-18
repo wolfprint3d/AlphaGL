@@ -25,16 +25,16 @@ namespace AGL
             cinfo->err->format_message(cinfo, errorMessage);
             LogError("jpg load failed: %s", errorMessage);
         };
-        uint load(const void* data, int size, int& outWidth, int& outHeight, int& outChannels)
+        bool load(Bitmap& bmp, const void* imageData, int numBytes)
         {
             jerr.error_exit = &Err;
             cinfo.err = jpeg_std_error(&jerr);
 
             jpeg_create_decompress(&cinfo);
-            jpeg_mem_src(&cinfo, (png_bytep)data, (ulong)size);
+            jpeg_mem_src(&cinfo, (uint8_t*)imageData, (unsigned long)numBytes);
             if (jpeg_read_header(&cinfo, TRUE/*require image*/) != JPEG_HEADER_OK) {
                 LogWarning("Invalid JPG header");
-                return 0;
+                return false;
             }
 
             jpeg_start_decompress(&cinfo);
@@ -46,7 +46,7 @@ namespace AGL
             uint8_t* img = (uint8_t*)malloc(size_t(stride * height));
             if (!img) { // most likely corrupted image
                 LogError("Failed to allocate %d bytes", stride * height);
-                return 0;
+                return false;
             }
 
             JSAMPARRAY buf = cinfo.mem->alloc_sarray((j_common_ptr)&cinfo, JPOOL_IMAGE, uint(stride), 1);
@@ -62,10 +62,13 @@ namespace AGL
                 memcpy(row, buf[0], size_t(stride));
             }
 
-            outWidth    = width;
-            outHeight   = height;
-            outChannels = channels;
-            return Texture::createTexture(img, width, height, channels, false, true);
+            bmp.Data     = img;
+            bmp.Width    = width;
+            bmp.Height   = height;
+            bmp.Channels = channels;
+            bmp.Stride   = stride;
+            bmp.Owns     = true;
+            return true;
         }
     };
 #endif // AGL_JPEG_SUPPORT

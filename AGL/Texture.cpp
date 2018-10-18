@@ -70,8 +70,9 @@ namespace AGL
         }
 
         texname = filename;
-        if (auto buf = rpp::file::read_all(filename))
+        if (auto buf = rpp::file::read_all(filename)) {
             return loadBitmap(buf.data(), buf.size(), getTextureHint(filename));
+        }
 
         LogWarning("failed to load file '%s'", filename.c_str());
         return false;
@@ -92,12 +93,7 @@ namespace AGL
             default:         LogError("error: unsupported image format: %d", hint);
         }
 
-
-
-        if (!glTexture) {
-            LogError("failed to generate GL texture: '%s'", texname.c_str());
-        }
-        return glTexture != 0;
+        return loadData(bitmap);
     }
 
     bool Texture::loadData(const void* data, int width, int height, int channels)
@@ -106,9 +102,10 @@ namespace AGL
             LogError("invalid texture data: %p %dx%dpx ch:%d", data, width, height, channels);
             return false;
         }
-        glTexture = createTexture((void*)data, width, height, channels, /*freeAllocatedImage:*/false);
-        glWidth = width;
-        glHeight = height;
+
+        glTexture  = createTexture((void*)data, width, height, channels);
+        glWidth    = width;
+        glHeight   = height;
         glChannels = channels;
         if (!glTexture) {
             LogError("failed to generate GL texture");
@@ -116,12 +113,12 @@ namespace AGL
         return glTexture != 0;
     }
 
-    bool Texture::loadData(const Bitmap& bitmap)
+    bool Texture::loadData(const Bitmap& bmp)
     {
-        glTexture = createTexture((void*)bitmap.Data, bitmap.Width, bitmap.Height, bitmap.Channels, /*freeAllocatedImage:*/false);
-        glWidth = bitmap.Width;
-        glHeight = bitmap.Height;
-        glChannels = bitmap.Channels;
+        glTexture  = createTexture((void*)bmp.Data, bmp.Width, bmp.Height, bmp.Channels);
+        glWidth    = bmp.Width;
+        glHeight   = bmp.Height;
+        glChannels = bmp.Channels;
         if (!glTexture) {
             LogError("failed to generate GL texture");
         }
