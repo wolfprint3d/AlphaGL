@@ -92,25 +92,17 @@ namespace AGL
             case TexHintBMP: bitmap.loadBMP(bitmapData, numBytes); break;
             default:         LogError("error: unsupported image format: %d", hint);
         }
-
         return load(bitmap);
     }
 
-    bool Texture::load(const void* data, int width, int height, int channels)
+    bool Texture::load(const void* data, int width, int height, int channels, int stride)
     {
         if (!data || width <= 0 || height <= 0 || channels <= 0) {
-            LogError("invalid texture data: %p %dx%dpx ch:%d", data, width, height, channels);
+            LogError("invalid texture data: %p %dx%dpx ch:%d str:%d", data, width, height, channels, stride);
             return false;
         }
-
-        glTexture  = createTexture((void*)data, width, height, channels);
-        glWidth    = width;
-        glHeight   = height;
-        glChannels = channels;
-        if (!glTexture) {
-            LogError("failed to generate GL texture");
-        }
-        return glTexture != 0;
+        Bitmap bitmap { (uint8_t*)data, width, height, channels, stride, false };
+        return load(bitmap);
     }
 
     bool Texture::load(const Bitmap& bmp)
