@@ -249,9 +249,12 @@ namespace AGL
         //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, pow2 ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR);
 
         // GLES on iOS requires this to enable NPOT textures:
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-        glPixelStorei(GL_UNPACK_ALIGNMENT, 4); // 4 is the default value
+        #ifdef TARGET_OS_IPHONE
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+            glPixelStorei(GL_UNPACK_ALIGNMENT, 4); // 4 is the default value
+        #endif
+
         glTexImage2D(GL_TEXTURE_2D, 0, gpuFmt, w, h, 0, imgFmt, GL_UNSIGNED_BYTE, imageData);
 
         if (const char* err = glGetErrorStr()) {
@@ -260,7 +263,7 @@ namespace AGL
             return 0;
         }
 
-        if (pow2) glGenerateMipmap(GL_TEXTURE_2D); // generate mipmaps
+        //if (pow2) glGenerateMipmap(GL_TEXTURE_2D); // generate mipmaps
 
         glBindTexture(GL_TEXTURE_2D, 0); // unbind the texture
         return glTexture;
